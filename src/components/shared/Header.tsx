@@ -50,10 +50,12 @@ export default function Header() {
 
         {/* Mobile */}
         <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger>
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Menu className="h-6 w-6" />
-            </Button>
+          <SheetTrigger
+            render={
+              <Button variant="ghost" size="icon" className="md:hidden" />
+            }
+          >
+            <Menu className="h-6 w-6" />
           </SheetTrigger>
 
           <SheetContent side="right" className="w-72">
