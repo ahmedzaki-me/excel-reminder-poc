@@ -49,12 +49,12 @@ const ReminderItem = memo(function ReminderItem({
   onCancel: (id: string) => void;
 }) {
   return (
-    <li className="flex items-center justify-between gap-4 px-4 py-3">
+    <li className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
       <div className="min-w-0">
         <div className="flex items-center gap-2">
           <p className="truncate text-sm font-medium">{reminder.title}</p>
           <span
-            className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[reminder.status]}`}
+            className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[reminder.status]}`}
           >
             {reminder.status}
           </span>
@@ -72,18 +72,19 @@ const ReminderItem = memo(function ReminderItem({
         </p>
       </div>
 
-      <div className="flex shrink-0 items-center gap-1">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-1">
         <Button
           variant="outline"
           size="sm"
           className="
+    flex-1
     gap-2
     border-green-200
     bg-green-50
     text-green-700
     hover:bg-green-100
     hover:border-green-300
-
+    sm:flex-none
   "
           onClick={() => onMarkAsRead(reminder.id)}
         >
@@ -96,6 +97,7 @@ const ReminderItem = memo(function ReminderItem({
           aria-label="Cancel reminder"
           onClick={() => onCancel(reminder.id)}
           className="
+    shrink-0
     rounded-full
     bg-red-50
     text-red-600
@@ -168,7 +170,7 @@ export default function ReminderPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-8 px-4 py-10">
+    <div className="mx-auto w-full max-w-4xl space-y-8 px-1 py-10">
       <div className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">Reminders</h1>
         <p className="text-sm text-muted-foreground">
