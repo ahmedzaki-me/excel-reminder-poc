@@ -1,41 +1,93 @@
-import { CalendarDays, Phone, MessageCircle } from "lucide-react";
+import { CalendarDays, Menu } from "lucide-react";
 import { Link, NavLink } from "react-router";
 
-const PHONE = "201234567890";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+  SheetClose,
+} from "@/components/ui/sheet";
+
+import { useState } from "react";
+const links = [
+  { to: "/", label: "Home" },
+  { to: "/excel", label: "Excel" },
+  { to: "/reminder", label: "Reminder" },
+];
 
 export default function Header() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <header className="border-b bg-white">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-2 text-lg font-bold">
-          <CalendarDays className="h-6 w-6 text-blue-600" />
+    <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+        <Link to="/" className="flex items-center gap-2 text-lg font-semibold">
+          <CalendarDays className="h-6 w-6 text-primary" />
           Reminder Tools
         </Link>
 
-        <nav className="flex gap-6">
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/excel">Excel</NavLink>
-          <NavLink to="/reminder">Reminder</NavLink>
+        {/* Desktop */}
+        <nav className="hidden items-center gap-8 md:flex">
+          {links.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              className={({ isActive }) =>
+                isActive
+                  ? "font-medium text-primary"
+                  : "text-muted-foreground transition-colors hover:text-foreground"
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
         </nav>
 
-        <div className="flex gap-3">
-          <a
-            href={`tel:+${PHONE}`}
-            className="flex items-center gap-2 rounded-lg border px-4 py-2 hover:bg-gray-100"
-          >
-            <Phone size={18} />
-            Call
-          </a>
+        {/* Mobile */}
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger>
+            <Button variant="ghost" size="icon" className="md:hidden">
+              <Menu className="h-6 w-6" />
+            </Button>
+          </SheetTrigger>
 
-          <a
-            href={`https://wa.me/${PHONE}`}
-            target="_blank"
-            className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700"
-          >
-            <MessageCircle size={18} />
-            WhatsApp
-          </a>
-        </div>
+          <SheetContent side="right" className="w-72">
+            <SheetHeader>
+              <SheetTitle>Enexabit</SheetTitle>
+              <SheetDescription>
+                Import Excel files, generate reminders and stay organized with
+                an easy-to-use interface.
+              </SheetDescription>
+            </SheetHeader>
+
+            <nav className="mt-8 flex flex-col gap-2">
+              {links.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  className={({ isActive }) =>
+                    `rounded-md px-3 py-2 transition-colors ${
+                      isActive
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-muted"
+                    }`
+                  }
+                  onClick={() => setOpen(false)}
+                >
+                  {link.label}
+                </NavLink>
+              ))}
+            </nav>
+            <SheetFooter>
+              <SheetClose render={<Button variant="outline">Close</Button>} />
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );
