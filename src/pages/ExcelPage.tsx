@@ -37,6 +37,8 @@ import {
 import { importExcel } from "@/services/excel.service";
 import { exportExcel } from "@/services/excel.service";
 
+import ApiFaq from "@/components/shared/FAQ";
+
 const MAX_ROWS = 1000;
 const PREVIEW_ROWS = 8;
 const ALL_COLUMNS: Record<string, string[]> = {
@@ -476,6 +478,8 @@ export default function ExcelPage() {
           </div>
         </CardContent>
       </Card>
+      <Separator />
+      <ApiFaq />
     </div>
   );
 }
