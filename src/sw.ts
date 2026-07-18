@@ -46,10 +46,6 @@ self.addEventListener("push", (event) => {
       },
       actions: [
         {
-          action: "open",
-          title: "Open",
-        },
-        {
           action: "mark-read",
           title: "Mark as Read",
         },
@@ -62,45 +58,15 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   const { reminderId } = event.notification.data ?? {};
-  const targetUrl = "/reminder";
 
-  event.waitUntil(
-    (async () => {
-      try {
-        switch (event.action) {
-          case "mark-read":
-            if (reminderId) {
-              await markReminderAsRead(USER_ID, reminderId);
-            }
-            break;
-          case "open":
-          default: {
-            const windowClients = await self.clients.matchAll({
-              type: "window",
-              includeUncontrolled: true,
-            });
+  if (event.action === "mark-read") {
+    if (reminderId) {
+      event.waitUntil(markReminderAsRead(USER_ID, reminderId));
+    }
+    return;
+  }
 
-            let handled = false;
-            for (const client of windowClients) {
-              if ("focus" in client) {
-                await client.focus();
-                if ("navigate" in client) {
-                  await (client as WindowClient).navigate(targetUrl);
-                }
-                handled = true;
-                break;
-              }
-            }
+  const targetUrl = new URL("/reminder", self.registration.scope).href;
 
-            if (!handled) {
-              await self.clients.openWindow(targetUrl);
-            }
-            break;
-          }
-        }
-      } catch (error) {
-        console.error("Notification action failed:", error);
-      }
-    })(),
-  );
+  event.waitUntil(self.clients.openWindow(targetUrl));
 });
